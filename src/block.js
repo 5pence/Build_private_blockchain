@@ -45,7 +45,7 @@ class Block {
                 let newHash = SHA256(JSON.stringify(self)).toString();
                 // Compare and resolve
                 if (auxiliaryHash !== newHash) {
-                    console.log('Invalid comparasion: '+ auxiliaryHash + ' !== ' + newHash);
+                    console.log('Invalid comparison: '+ auxiliaryHash + ' !== ' + newHash);
                     resolve(false);
                 }
                 resolve(true);
