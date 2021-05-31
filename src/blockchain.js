@@ -77,14 +77,19 @@ class Blockchain {
             }
             // set current block hash
             block.hash = SHA256(JSON.stringify(block)).toString();
-            // validate the chain before every addition
-            if ( await self.validateChain()) {
+            // validate the chain before every addition **changed 31/03/21 due to truthy always being returned
+            // as an empty array returns true
+            let validatedArray = await self.validateChain();
+            // check the length of validatedArray to ensure it is empty of errors
+            if ( validatedArray.length === 0) {
                 // push the new block on chain
                 self.chain.push(block);
                 // increment height
                 self.height++;
                 // resolve the new block
                 resolve(block);
+            } else {
+                console.log("Errors in the validatedArray call");
             }
         });
     }
@@ -153,7 +158,8 @@ class Blockchain {
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-           const block = self.chain.filter(block => block.hash === hash);
+            // 31/03/21 changed from filter to find upon code review
+           const block = self.chain.find(block => block.hash === hash);
            if (typeof block !== 'undefined') {
                resolve(block)
            } else {
