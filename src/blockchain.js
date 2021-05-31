@@ -44,7 +44,7 @@ class Blockchain {
      * Utility method that return a Promise that will resolve with the height of the chain
      */
     getChainHeight() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             resolve(this.height);
         });
     }
@@ -63,23 +63,29 @@ class Blockchain {
      */
     _addBlock(block) {
         let self = this;
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             // get block's height
-            block.height = self.height + 1;
-            //get time
+            block.height = self.chain.length;
+            //get the block time
             block.time = new Date().getTime().toString().slice(0, -3);
             // get previous block hash if not genesis block
             if (self.chain.length > 0) {
                 block.previousBlockHash = self.chain[self.chain.length - 1].hash;
+            } else {
+                // set genesis previous to 0 instead of null
+                block.previousBlockHash = 0;
             }
             // set current block hash
             block.hash = SHA256(JSON.stringify(block)).toString();
-            // push the new block on chain
-            self.chain.push(block);
-            // increment height
-            self.height++;
-            // resolve the new block
-            resolve(block);
+            // validate the chain before every addition
+            if ( await self.validateChain()) {
+                // push the new block on chain
+                self.chain.push(block);
+                // increment height
+                self.height++;
+                // resolve the new block
+                resolve(block);
+            }
         });
     }
 
@@ -163,7 +169,7 @@ class Blockchain {
      */
     getBlockByHeight(height) {
         let self = this;
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             let block = self.chain.filter(p => p.height === height)[0];
             if(block){
                 resolve(block);
@@ -182,7 +188,7 @@ class Blockchain {
     getStarsByWalletAddress (address) {
         let self = this;
         let stars = [];
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             // loop each block
             self.chain.forEach( async (blockBodyDecodedData) => {
                 // get the blocks data
@@ -208,7 +214,7 @@ class Blockchain {
     validateChain() {
         let self = this;
         let errorLog = [];
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             let validatedBlocks = [];
             self.chain.forEach((block, index) => {
                 //check it is not the genesis block
