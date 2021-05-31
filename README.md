@@ -11,4 +11,4 @@ I ran the app locally with `node app.js`
 I used Postman for checking my local endpoints:
 
 1. Genesis block lookup:
-   ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "postman block/height/0 lookup")
+   ![alt text](https://github.com/5pence/Build_private_blockchain/blob/main/Screenshot%202021-05-31%20at%2016.26.48.png "postman block/height/0 lookup")
