@@ -80,6 +80,7 @@ class Blockchain {
             // validate the chain before every addition **changed 31/03/21 due to truthy always being returned
             // as an empty array returns true
             let validatedArray = await self.validateChain();
+            console.log("validatedArray: ", validatedArray);
             // check the length of validatedArray to ensure it is empty of errors
             if ( validatedArray.length === 0) {
                 // push the new block on chain
@@ -89,7 +90,7 @@ class Blockchain {
                 // resolve the new block
                 resolve(block);
             } else {
-                console.log("Errors in the validatedArray call");
+                console.log("Errors in the validated Array call");
             }
         });
     }

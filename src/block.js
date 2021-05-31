@@ -40,9 +40,9 @@ class Block {
         return new Promise((resolve, reject) => {
             try {
                 // Save in auxiliary variable the current block hash
-                const auxiliaryHash = self.hash;
+                let auxiliaryHash = self.hash;
                 // Recalculate the hash of the Block
-                const newHash = SHA256(JSON.stringify(self)).toString();
+                let newHash = SHA256(JSON.stringify(self)).toString();
                 // Compare and resolve
                 if (auxiliaryHash !== newHash) {
                     console.log('Invalid comparasion: '+ auxiliaryHash + ' !== ' + newHash);
